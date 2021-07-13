@@ -35,7 +35,7 @@ rust学习方面用rust写了写二叉树，还是比想象中要困难的，而
 
 完成了rustlings，对一些比较陌生的概念也理清楚了，这两天有别的安排所以进度稍微慢了点
 
-![](.\image\rustlings.png)
+![](rustlings.png)
 
 ## Day 10 2021/7/10
 
