@@ -84,13 +84,33 @@ Clock算法流程
 
 可以说第3点是比较出乎意料的，当时由于FIFO和Clock算法都是尽量保留最近使用的页表项，而我设置的伪随机测试，相对跨度比较大，很难命中之前用过的内存，故缺页率高也相对正常。测试代码如下：
 ```rust
-    let mut step = 0;
-    let test_times = 0;
-    while test_times < 1000 {
-        step = step + test_times;
-        let i = step % array.len();
+    pub unsafe fn main() -> usize {
+    let mut i = 0;
+    while i < array.len() {
         array[i] = i;
+        i = i + 1;
     }
+    let mut step = 0;
+    let mut test_times = 0;
+    while test_times < 3000 {
+        step = (step + test_times) % array.len();
+        let i = step;
+        array[i] = i;
+        test_times = test_times + 1;
+    }
+    for i in 0..array.len() {
+        assert_eq!(i, array[i]);
+    }
+    println!("\x1b[32mtest passed\x1b[0m");
+    0
+}
 ```
-在测试中这个循环的1000次中发生了990多次页面中断
-不过最终相比于FIFO还是有提升并且能通过测试的
+随着test_times的变化，缺页中断发生的次数也在增加，记录的几组数据如下：
+
+**test_times**  0    500  1000 2000 3000   
+
+**page_fault**  1133 1278 1778 2778 3778
+
+在test_times较大的时候，即每次访问内存跨度较大，缺页率甚至达到了100%，不过在跨度较小时，相比起FIFO还是有很大改进
+
+在顺序访问的时候Clock算法的缺页率是1133/(2*256 * 1024)为0.216%，效率也是相当高了。
