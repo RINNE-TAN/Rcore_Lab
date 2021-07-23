@@ -71,4 +71,16 @@ pub fn main() -> usize {
 结果如下：
 ![](sys_open.png)
 
+## 实现sys_get_tid()
+思路基本一样，比较简单
+```rust
+pub(super) fn sys_get_tid() -> SyscallResult {
+    SyscallResult::Proceed(PROCESSOR.lock().current_thread().id)
+}
+```
+## 实现sys_fork()
+最终还是绕不开要来写进程的fork，调度器PROCESSOR依旧是全局的，引入新进程后不影响，只要把新进程的线程给全部加入调度器即可。
+
+......折腾了一晚上，放弃，这里对内存的拷贝实在是太难做了。
+
 
