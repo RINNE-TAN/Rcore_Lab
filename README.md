@@ -1,4 +1,8 @@
 # 实验总结
+
+## 实验日志
+[**Daily Schedule**](./daily_schedule/daily_schedule.md)
+
 ## 结构说明
 
 - [**daily_schedule**](./daily_schedule/daily_schedule.md) 实验过程中的日志
